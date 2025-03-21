@@ -2,6 +2,8 @@
 
 This project features a granular synthesizer with real-time visual representation of each sound grain, built with ChucK and the ChugL graphical framework. The synthesizer responds to MIDI input and provides an interactive audiovisual experience where every grain of sound is visualized as a colorful circle.
 
+Every grain that is generated is visualized in real-time. Each vertical line represents a note, and the size of each circle represents grain-size and velocity. The visual component adds a new dimension to the understanding and enjoyment of granular synthesis.
+
 ## Features
 
 - **Granular Synthesis**: Plays small "grains" of sound from audio samples
