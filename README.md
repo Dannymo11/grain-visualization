@@ -1,50 +1,35 @@
-# MIDI Granular Synthesizer with Visual Representation
+# MIDI Granular Synthesizer with Pitch Shifting
 
-This project features a granular synthesizer with real-time visual representation of each sound grain, built with ChucK and the ChugL graphical framework. The synthesizer responds to MIDI input and provides an interactive audiovisual experience where every grain of sound is visualized as a colorful circle.
+This project contains a granular synthesizer that responds to MIDI input, built with ChucK. The latest implementation uses pitch shifting for more accurate note reproduction.
 
-## Features
+## Files
 
-- **Granular Synthesis**: Plays small "grains" of sound from audio samples
-- **Real-time Visualization**: Every grain appears as a vibrant circle in a 3D space
-- **MIDI Control**: Full MIDI compatibility for notes and controllers
-- **Pitch Shifting**: Uses ChucK's PitShift UGen for accurate pitch shifting
-- **Polyphonic Playback**: Supports playing multiple notes simultaneously
-- **Integrated Audio-Visual Experience**: Sound and visuals are tightly coupled
+- `experiment.ck` - Original granular synth with Xbox controller input
+- `midi.ck` - First attempt at MIDI-controlled granular synth
+- `granular_midi.ck` - New improved MIDI granular synth with pitch shifting
 
-## Running granular_visual.ck
+## Running the Granular MIDI Synth
 
-To run the audiovisual granular synthesizer:
+To run the improved MIDI granular synth with pitch shifting:
 
-```bash
-chuck granular_visual.ck
+```
+chuck granular_midi.ck
 ```
 
-The program will automatically try to connect to a MIDI device (specifically looking for "MPK225 Port A" or "Logic Pro Virtual Out" first, then falling back to the default MIDI device).
+You can specify a different sample file:
 
-## Required Files
-
-The project includes sample audio files in the xboxController directory:
-- `sample.aif` (default sample)
-- `c2.aif`
-- `kick.aif`
-- `organ.aif`
+```
+chuck granular_midi.ck:path/to/sample.wav
+```
 
 ## How It Works
 
-### Audio Generation
-The synthesizer generates sound by playing small overlapping "grains" from an audio sample. Each grain:
-1. Has its own pitch, determined by the MIDI note being played
-2. Is processed through a pitch shifter for accurate tuning
-3. Has an envelope applied (attack and release) to avoid clicks
-4. Can have randomized parameters (position, pitch) for a more organic sound
+The granular MIDI synthesizer uses a combination of techniques:
 
-### Visual Representation
-For each audio grain generated:
-1. A colored circle is created in the 3D scene
-2. The circle's position represents the pitch (Y-axis) and a randomized X position
-3. The circle's size relates to the grain's velocity and length
-4. The color is randomly generated for a vibrant, artistic effect
-5. Circles fade out as the grain completes, creating a dynamic visual field
+1. **Granular Synthesis**: Plays small "grains" of sound from a sample
+2. **Pitch Shifting**: Uses ChucK's PitShift UGen to accurately shift the pitch of grains
+3. **Envelope Shaping**: Applies attack and release envelopes to each grain
+4. **Polyphony**: Supports playing multiple notes simultaneously
 
 ## MIDI Controls
 
@@ -56,49 +41,43 @@ For each audio grain generated:
 - **CC24**: Controls position offset in the sample (0 to 1)
 - **CC25**: Controls position randomness (0 to 0.5)
 - **CC26**: Controls pitch randomness (0 to 2 semitones)
-- **CC27**: Controls reverb mix (0 to 0.8)
-- **CC28**: Controls grain overlap (0.2 to 0.9)
-- **CC29**: Controls master gain (0 to 1.5)
+- **CC27**: Controls reverb mix (0 to 0.5)
+- **CC28**: Controls grain overlap (0.1 to 1.0)
+- **CC29**: Controls master gain (0 to 1.2)
 
-## Default Parameters
+## Parameters You Can Modify
 
-The following default parameters are used:
+The following global parameters can be adjusted in the code:
 
 ```chuck
-"xboxController/sample.aif" => string SAMPLE_PATH;  // Default sample
-50::ms => dur GRAIN_LENGTH;                // Base grain length
-0.5 => float GRAIN_DENSITY;                // Grains per second
-0.7 => float GRAIN_OVERLAP;                // Overlap between grains
-1.0 => float FIRING_RATE;                  // Rate of grain generation
-0.1 => float POSITION_RANDOM;              // Random position variation
-0.0 => float PITCH_RANDOM;                 // Random pitch variation
-0.1 => float POSITION_OFFSET;              // Starting position in sample
-0.2 => float ATTACK_TIME;                  // Attack time fraction
-0.2 => float RELEASE_TIME;                 // Release time fraction
+"special:dope" => string SAMPLE_PATH;  // Default sample
+50::ms => dur GRAIN_LENGTH;            // Base grain length
+0.5 => float GRAIN_DENSITY;            // Grains per second
+0.7 => float GRAIN_OVERLAP;            // Overlap between grains
+0.1 => float POSITION_RANDOM;          // Random position variation
+0.1 => float PITCH_RANDOM;             // Random pitch variation
+0 => float POSITION_OFFSET;            // Starting position in sample
+0.2 => float ATTACK_TIME;              // Attack time fraction
+0.2 => float RELEASE_TIME;             // Release time fraction
 ```
 
 ## Troubleshooting
 
-If you encounter issues:
+If no sound is playing:
 
-1. **No Sound**: 
-   - Make sure your MIDI device is connected and recognized
-   - Verify that the sample files exist in the xboxController directory
-   - Check that your audio output is properly configured
+1. Make sure your MIDI device is connected and recognized
+2. Check that the sample file exists or use a built-in ChucK sample like "special:dope"
+3. Verify that you're playing notes in the appropriate range
+4. Ensure your audio output is properly configured
 
-2. **No Visuals**:
-   - Ensure you have the proper ChucK version with Graphics (GG) support
-   - Check that you have a compatible graphics system
+## Extending the Synth
 
-3. **Performance Issues**:
-   - Reduce the maximum number of grains (maxGrains variable) if visuals are lagging
-   - Increase the sleep time in the main loop for better performance
-
-## System Requirements
-
-- ChucK with Graphics (GG) support
-- MIDI controller or virtual MIDI input
-- Audio output device
+You can modify the code to:
+- Add more MIDI CC controls
+- Implement different grain selection algorithms
+- Add more effects processing
+- Create presets for different sounds
+- Add sample recording capabilities
 
 ## Credits
 
